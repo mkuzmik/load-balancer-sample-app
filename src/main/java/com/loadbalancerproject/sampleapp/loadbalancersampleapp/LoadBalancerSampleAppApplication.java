@@ -13,7 +13,7 @@ public class LoadBalancerSampleAppApplication {
 	@RequestMapping("/")
 	@ResponseBody
 	public String main() {
-		return "Hello";
+		return "Hello, I am Load Balancer Sample App!";
 	}
 
 
