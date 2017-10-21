@@ -1,0 +1,11 @@
+load-banancer-sample-app:
+    build: .
+    container_name: sample-app
+    ports:
+        - "8080:8080"
+
+database_0:
+    image: postgres:10
+    container_name: db0
+    ports:
+        - "5432:5432"
