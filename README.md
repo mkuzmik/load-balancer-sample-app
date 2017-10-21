@@ -62,6 +62,18 @@ Finito! You can access your app by typing in you browser:
 
 Not available yet...
 
+## Connecting to databases
+
+Requirements:
+- Postgres
+
+```
+psql -h <docker machine ip address> -p <database port> -U postgres
+# for example: psql -h 192.168.99.100 -p 5432 -U postgres
+```
+
+Then you can type SQL directly to database.
+
 ## Authors
 - Mateusz Kuźmik
 - Jakub Kacorzyk
