@@ -4,6 +4,9 @@
 This project contains an sample application to demonstrate load-balancer library.
 
 ## How to run
+
+*Important note: You should have https://github.com/mkuzmik/load-balancer project set up before.*
+
 This project require a few tool to run:
 - Java 8
 - Maven
@@ -64,6 +67,3 @@ Not available yet...
 - Jakub Kacorzyk
 - Bartłomiej Łazarczyk
 - Szymon Jakóbczyk
-
-
-
