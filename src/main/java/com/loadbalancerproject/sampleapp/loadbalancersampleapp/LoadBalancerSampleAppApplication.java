@@ -10,13 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoadBalancerSampleAppApplication {
 
-	@RequestMapping("/")
-	@ResponseBody
-	public String main() {
-		return "Hello, I am Load Balancer Sample App!";
-	}
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(LoadBalancerSampleAppApplication.class, args);
 	}
