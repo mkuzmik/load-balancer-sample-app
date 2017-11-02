@@ -1,4 +1,4 @@
-package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
+package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model;
 
 import javax.persistence.*;
 
@@ -20,6 +20,12 @@ public class Student {
     }
 
     public Student() {
+    }
+
+    public static Student from(StudentInput studentInput) {
+        return new Student(studentInput.getEmail(),
+                            studentInput.getName(),
+                            studentInput.getSurname());
     }
 
     public String getEmail() {

@@ -9,8 +9,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -20,20 +26,23 @@ public class PersistenceConfig {
 
     @Autowired
     Environment env;
-
+    
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(restDataSource());
-        sessionFactory.setPackagesToScan(
-                new String[] { "com.loadbalancerproject.sampleapp.loadbalancersampleapp" });
-        sessionFactory.setHibernateProperties(hibernateProperties());
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(primaryDataSource());
+        entityManagerFactory.setPackagesToScan(
+                new String[] {
+                        "com.loadbalancerproject.sampleapp.loadbalancersampleapp.student"});
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
+        entityManagerFactory.setJpaProperties(hibernateProperties());
 
-        return sessionFactory;
+        return entityManagerFactory;
     }
 
     @Bean
-    public DataSource restDataSource() {
+    public DataSource primaryDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
         dataSource.setUrl(env.getProperty("jdbc.url"));
@@ -41,18 +50,6 @@ public class PersistenceConfig {
         dataSource.setPassword(env.getProperty("jdbc.pass"));
 
         return dataSource;
-    }
-
-    @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(
-            SessionFactory sessionFactory) {
-
-        HibernateTransactionManager txManager
-                = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
-
-        return txManager;
     }
 
     @Bean

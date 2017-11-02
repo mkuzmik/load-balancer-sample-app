@@ -1,29 +1,29 @@
 package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 @Transactional
 public class StudentRepository {
 
-    @Autowired
-    LocalSessionFactoryBean localSessionFactoryBean;
+    @PersistenceContext
+    EntityManager entityManager;
 
     public void save(Student student) {
-        localSessionFactoryBean.getObject().getCurrentSession().save(student);
+        entityManager.persist(student);
     }
-//
-//    public void deleteByEmail(String email) {
-//
-//    }
-//
-//    public List<Student> getAll() {
-//
-//    }
+
+    public void delete(Student student) {
+        entityManager.remove(student);
+    }
+
+    public List<Student> getAll() {
+        return (List<Student>) entityManager.createQuery("from Student").getResultList();
+    }
 }

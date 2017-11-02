@@ -1,0 +1,17 @@
+<div id="homeView">
+    <div id="studentsTable">
+        <table class="table">
+            <thead>
+                <td>Email</td>
+                <td>First name</td>
+                <td>Last name</td>
+            </thead>
+            <tr ng-repeat="student in students">
+                <td>{{student.email}}</td>
+                <td>{{student.name}}</td>
+                <td>{{student.surname}}</td>
+            </tr>
+        </table>
+    </div>
+    <input class="btn" type="button" ng-click="create()" value="Add">
+</div>
