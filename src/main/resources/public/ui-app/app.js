@@ -10,11 +10,6 @@ app.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $url
             url: '',
             controller: 'homeController',
             templateUrl: 'views/home.html'
-        })
-        .state('create', {
-            url: '',
-            controller: 'createController',
-            templateUrl: 'views/create.html'
         });
 }]);
 
@@ -23,14 +18,13 @@ app.controller('homeController', function ($scope, $http, $state) {
     $scope.refresh = function() {
         $http.get('/getAll').then(function(response) {
             $scope.students = response.data;
+            $scope.email = '';
+            $scope.name = '';
+            $scope.surname = '';
         });
     };
 
     $scope.refresh();
-
-    $scope.create = function() {
-        $state.go('create');
-    };
 
     $scope.delete = function(student) {
         $http.delete('/delete', {
@@ -42,13 +36,7 @@ app.controller('homeController', function ($scope, $http, $state) {
         }).then(function() {
             $scope.refresh();
         })
-    }
-});
-
-app.controller('createController', function ($scope, $http, $state) {
-    $scope.email = '';
-    $scope.name = '';
-    $scope.surname = '';
+    };
 
     $scope.submit = function () {
         $http.post('/save', {
@@ -56,8 +44,8 @@ app.controller('createController', function ($scope, $http, $state) {
             name: $scope.name,
             surname: $scope.surname
         })
-            .then(function() {
-                $state.go('home');
-            });
+            .then(function () {
+                $scope.refresh();
+            })
     };
 });
