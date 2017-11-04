@@ -20,14 +20,29 @@ app.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $url
 
 app.controller('homeController', function ($scope, $http, $state) {
 
-    $http.get('/getAll').then(function(response) {
-        $scope.students = response.data;
-        console.log('Data ready');
-    });
+    $scope.refresh = function() {
+        $http.get('/getAll').then(function(response) {
+            $scope.students = response.data;
+        });
+    };
+
+    $scope.refresh();
 
     $scope.create = function() {
         $state.go('create');
     };
+
+    $scope.delete = function(student) {
+        $http.delete('/delete', {
+            params: {
+                email: student.email,
+                name: student.name,
+                surname: student.surname
+            }
+        }).then(function() {
+            $scope.refresh();
+        })
+    }
 });
 
 app.controller('createController', function ($scope, $http, $state) {
@@ -40,8 +55,9 @@ app.controller('createController', function ($scope, $http, $state) {
             email: $scope.email,
             name: $scope.name,
             surname: $scope.surname
-        });
-
-        $state.go('home');
+        })
+            .then(function() {
+                $state.go('home');
+            });
     };
 });

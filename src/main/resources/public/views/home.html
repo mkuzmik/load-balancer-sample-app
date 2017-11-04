@@ -1,7 +1,10 @@
 <div id="homeView">
+
+    <input class="btn" type="button" ng-click="create()" value="Add"><br>
+
     <div id="studentsTable">
         <table class="table">
-            <thead>
+            <thead class="header">
                 <td>Email</td>
                 <td>First name</td>
                 <td>Last name</td>
@@ -10,8 +13,9 @@
                 <td>{{student.email}}</td>
                 <td>{{student.name}}</td>
                 <td>{{student.surname}}</td>
+                <td><input class="btn" type="button" ng-click="delete(student)" value="Delete"></td>
             </tr>
         </table>
     </div>
-    <input class="btn" type="button" ng-click="create()" value="Add">
+
 </div>

@@ -20,7 +20,8 @@ public class StudentRepository {
     }
 
     public void delete(Student student) {
-        entityManager.remove(student);
+        Student merged = entityManager.merge(student);
+        entityManager.remove(merged);
     }
 
     public List<Student> getAll() {
