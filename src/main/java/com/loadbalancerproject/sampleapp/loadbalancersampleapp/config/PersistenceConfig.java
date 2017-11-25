@@ -1,5 +1,7 @@
 package com.loadbalancerproject.sampleapp.loadbalancersampleapp.config;
 
+import com.loadbalancerproject.loadbalancer.LoadBalancer;
+import com.loadbalancerproject.loadbalancer.LoadBalancerImpl;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import javax.xml.crypto.Data;
+import java.util.*;
 
 @Configuration
 @EnableTransactionManagement
@@ -28,40 +29,38 @@ public class PersistenceConfig {
 
     @Autowired
     Environment env;
-    
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-//        entityManagerFactory.setDataSource(primaryDataSource());
-//        entityManagerFactory.setPackagesToScan(
-//                new String[] {
-//                        "com.loadbalancerproject.sampleapp.loadbalancersampleapp.student"});
-//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-//        entityManagerFactory.setJpaProperties(hibernateProperties());
-//
-//        return entityManagerFactory;
-//    }
 
-    @Bean(name="testManager")
-    public EntityManagerFactory getEntityManagerFactory(){
-        Map<String, Object> props = new HashMap<String, Object>();
-        props.put("javax.persistence.nonJtaDataSource", primaryDataSource());
-        props.put("javax.persistence.transactionType", "RESOURCE_LOCAL");
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("manager1", props);
-        return factory;
+
+    @Bean
+    public LoadBalancer getLoadBalancer(){
+        List list = new ArrayList<DataSource>();
+        list.add(primaryDataSource());
+        list.add(secondaryDataSource());
+        LoadBalancer loadBalancer = new LoadBalancerImpl(list);
+        return loadBalancer;
     }
 
     @Bean
     public DataSource primaryDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-        dataSource.setUrl(env.getProperty("jdbc.url"));
-        dataSource.setUsername(env.getProperty("jdbc.user"));
-        dataSource.setPassword(env.getProperty("jdbc.pass"));
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://192.168.99.100:5432/postgres");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("");
 
         return dataSource;
     }
+
+    public DataSource secondaryDataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://192.168.99.100:5434/postgres");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("");
+
+        return dataSource;
+    }
+
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
