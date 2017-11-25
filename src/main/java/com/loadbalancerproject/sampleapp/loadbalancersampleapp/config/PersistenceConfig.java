@@ -2,6 +2,7 @@ package com.loadbalancerproject.sampleapp.loadbalancersampleapp.config;
 
 
 import com.loadbalancerproject.loadbalancer.*;
+import com.loadbalancerproject.loadbalancer.config.DBConfig;
 import com.loadbalancerproject.loadbalancer.exception.DataSourceParametersException;
 import com.loadbalancerproject.loadbalancer.factory.DataSourceFactory;
 import com.loadbalancerproject.loadbalancer.prototype.DataSourcePrototype;
@@ -95,26 +96,28 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public List<DataSource> dataSourcesList(){
-
-        LinkedList<DataSource> list = new LinkedList<>();
+    public DBConfig dataSourcesList(){
+        List<DataSource> list = new LinkedList<>();
         try {
             list.add(DataSourceFactory.createDataSource(prototype));
             list.add(DataSourceFactory.createDataSource(prototype1));
             list.add(DataSourceFactory.createDataSource(prototype2));
             list.add(DataSourceFactory.createDataSource(prototype3));
             list.add(DataSourceFactory.createDataSource(prototype4));
+            list.add(DataSourceFactory.createDataSource(prototype4));
             list.add(DataSourceFactory.createDataSource(prototype5));
             list.add(DataSourceFactory.createDataSource(prototype6));
             list.add(DataSourceFactory.createDataSource(prototype7));
             list.add(DataSourceFactory.createDataSource(prototype8));
             list.add(DataSourceFactory.createDataSource(prototype9));
-
         }
         catch (DataSourceParametersException e){
             e.printStackTrace();
         }
-        return list;
+        DBConfig config = new DBConfig.DBConfigBuilder()
+                                   .dataSourceList(list)
+                                    .build();
+        return config;
     }
     @Bean
     public LoadBalancer getLoadBalancer(){
