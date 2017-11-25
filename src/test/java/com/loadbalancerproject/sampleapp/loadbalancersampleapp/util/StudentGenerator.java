@@ -2,7 +2,9 @@ package com.loadbalancerproject.sampleapp.loadbalancersampleapp.util;
 
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StudentGenerator {
 
@@ -11,7 +13,7 @@ public class StudentGenerator {
     };
 
     private static String[] SURNAMES = new String[] {
-            "Janusz", "Andrzej", "Kamil", "Norbert", "Mikołaj", "Mariusz", "Nikodem"
+            "Kowalski", "Nowak", "Lock", "Singleton", "Adapter", "Obserwator", "Abstrakcyjny", "Fabryczny"
     };
 
     private static String[] EMAIL_SUFFIX = new String[] {
@@ -28,6 +30,16 @@ public class StudentGenerator {
         return new Student(email, name, surname);
     }
 
+    public Collection<Student> generateStudents(int amount) {
+        Set<Student> students = new HashSet<>();
+
+        do {
+            students.add(nextStudent());
+        } while (students.size() < amount);
+
+        return students;
+    }
+
     private String randomName() {
         return NAMES[random.nextInt(NAMES.length)];
     }
@@ -39,8 +51,8 @@ public class StudentGenerator {
     private String randomEmail(String name, String surname) {
 
         String namePart = name.substring(0, random.nextInt(name.length() - 1)).toLowerCase();
-        String surnamePart = name.substring(0, random.nextInt(surname.length() - 1)).toLowerCase();
-        String numPart = Integer.toString(random.nextInt(100));
+        String surnamePart = surname.substring(0, random.nextInt(surname.length() - 1)).toLowerCase();
+        String numPart = UUID.randomUUID().toString();
         String suffix = EMAIL_SUFFIX[random.nextInt(EMAIL_SUFFIX.length)];
 
         return namePart + surnamePart + numPart + "@" + suffix;

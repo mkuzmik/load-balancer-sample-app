@@ -1,9 +1,11 @@
 package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
 
 import com.loadbalancerproject.loadbalancer.LoadBalancer;
+import com.loadbalancerproject.loadbalancer.ReadOnlyQueryCreator;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import javax.transaction.Transaction;
 import java.util.List;
 
 @Repository
+
 public class StudentRepository {
 
 
@@ -34,6 +37,11 @@ public class StudentRepository {
     }
 
     public List<Student> getAll() {
-        return (List<Student>) loadBalancer.getEntityManager().createQuery("from Student").getResultList();
+        ReadOnlyQueryCreator readonlyExecutor = loadBalancer.getReadonlyExecutor();
+        List result = readonlyExecutor.createReadonlyQuery("from Student").getResultList();
+
+        readonlyExecutor.close();
+
+        return (List<Student>) result;
     }
 }
