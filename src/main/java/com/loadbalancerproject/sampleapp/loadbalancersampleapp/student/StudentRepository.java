@@ -2,6 +2,7 @@ package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
 
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,9 @@ import java.util.List;
 @Repository
 public class StudentRepository {
 
+    @Qualifier("testManager")
     private EntityManagerFactory entityManagerFactory;
+
     private EntityManager entityManager;
 
     @Autowired

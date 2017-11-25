@@ -18,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -27,18 +29,27 @@ public class PersistenceConfig {
     @Autowired
     Environment env;
     
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(primaryDataSource());
-        entityManagerFactory.setPackagesToScan(
-                new String[] {
-                        "com.loadbalancerproject.sampleapp.loadbalancersampleapp.student"});
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-        entityManagerFactory.setJpaProperties(hibernateProperties());
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+//        entityManagerFactory.setDataSource(primaryDataSource());
+//        entityManagerFactory.setPackagesToScan(
+//                new String[] {
+//                        "com.loadbalancerproject.sampleapp.loadbalancersampleapp.student"});
+//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
+//        entityManagerFactory.setJpaProperties(hibernateProperties());
+//
+//        return entityManagerFactory;
+//    }
 
-        return entityManagerFactory;
+    @Bean(name="testManager")
+    public EntityManagerFactory getEntityManagerFactory(){
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put("javax.persistence.nonJtaDataSource", primaryDataSource());
+        props.put("javax.persistence.transactionType", "RESOURCE_LOCAL");
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("manager1", props);
+        return factory;
     }
 
     @Bean
