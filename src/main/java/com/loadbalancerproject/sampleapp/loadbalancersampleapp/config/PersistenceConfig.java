@@ -6,6 +6,8 @@ import com.loadbalancerproject.loadbalancer.config.DBConfig;
 import com.loadbalancerproject.loadbalancer.exception.DataSourceParametersException;
 import com.loadbalancerproject.loadbalancer.factory.DataSourceFactory;
 import com.loadbalancerproject.loadbalancer.prototype.DataSourcePrototype;
+import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.StudentDAO;
+import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.StudentRepository;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -119,6 +121,7 @@ public class PersistenceConfig {
                                     .build();
         return config;
     }
+
     @Bean
     public LoadBalancer getLoadBalancer(){
 
@@ -126,6 +129,9 @@ public class PersistenceConfig {
         return loadBalancer;
     }
 
+    public StudentDAO getStudentDAO(LoadBalancer loadBalancer) {
+        return new StudentRepository(loadBalancer);
+    }
 
 
     @Bean
