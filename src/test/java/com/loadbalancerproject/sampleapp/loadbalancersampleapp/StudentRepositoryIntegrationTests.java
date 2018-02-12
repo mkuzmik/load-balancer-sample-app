@@ -47,6 +47,22 @@ public class StudentRepositoryIntegrationTests extends AbstractTestNGSpringConte
         assertThatRepositoryContains(expectedStudents);
     }
 
+    @Test
+    public void shouldGetSameResultWhenManyGetAllRequests() throws Exception {
+
+        // given
+        int numberOfInserts = 100;
+        int numberOfGets = 100;
+        Collection<Student> expectedStudents = studentGenerator.generateStudents(numberOfInserts);
+
+        // when
+        saveStudentsAsynchronously(expectedStudents);
+
+        // then
+        IntStream.range(0, numberOfGets).parallel().forEach(x ->
+                assertThatRepositoryContains(expectedStudents));
+    }
+
     private void saveStudentsAsynchronously(Collection<Student> students) {
         students.parallelStream()
                 .forEach(student -> studentRepository.save(student));
