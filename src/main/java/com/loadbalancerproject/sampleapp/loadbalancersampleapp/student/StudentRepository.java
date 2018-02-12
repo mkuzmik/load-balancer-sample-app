@@ -1,11 +1,15 @@
 package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
 
 import com.loadbalancerproject.loadbalancer.LoadBalancer;
+import com.loadbalancerproject.loadbalancer.readonlyqueryexecutor.SelectQuery;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -30,7 +34,13 @@ public class StudentRepository {
     }
 
     public List<Student> getAll() {
-        EntityManager entityManager = loadBalancer.getEntityManager();
-        return (List<Student>) entityManager.createQuery("from Student").getResultList();
+
+        SelectQuery selectQuery = loadBalancer.getSelectQuery();
+
+        CriteriaQuery<Student> criteriaQuery = selectQuery.getCriteriaQuery(Student.class);
+
+        Root<Student> from = criteriaQuery.from(Student.class);
+
+        return selectQuery.getTypedQuery(criteriaQuery.select(from)).getResultList();
     }
 }
