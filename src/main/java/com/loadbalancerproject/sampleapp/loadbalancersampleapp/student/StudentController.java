@@ -13,12 +13,12 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    StudentRepository studentRepository;
+    StudentDAO studentDAO;
 
     @RequestMapping(path = "/save", method = RequestMethod.POST)
     @ResponseBody
     public void create(@RequestBody @Valid StudentInput studentInput) {
-        studentRepository.save(Student.from(studentInput));
+        studentDAO.save(Student.from(studentInput));
     }
 
     @RequestMapping(path = "/delete", method = RequestMethod.DELETE)
@@ -26,12 +26,12 @@ public class StudentController {
     public void delete(@RequestParam("email") String email,
                        @RequestParam("name") String name,
                        @RequestParam("surname") String surname) {
-        studentRepository.delete(new Student(email, name, surname));
+        studentDAO.delete(new Student(email, name, surname));
     }
 
     @RequestMapping(path = "/getAll", method = RequestMethod.GET)
     @ResponseBody
     public List<Student> getAll() {
-        return studentRepository.getAll();
+        return studentDAO.getAll();
     }
 }
