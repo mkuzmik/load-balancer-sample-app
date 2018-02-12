@@ -12,13 +12,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository
 @SuppressWarnings("unchecked")
 public class StudentRepository implements StudentDAO {
 
     private LoadBalancer loadBalancer;
 
-    @Autowired
     public StudentRepository(LoadBalancer loadBalancer) {
         this.loadBalancer = loadBalancer;
     }

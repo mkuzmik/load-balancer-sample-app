@@ -2,10 +2,12 @@ package com.loadbalancerproject.sampleapp.loadbalancersampleapp;
 
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.config.AppConfig;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.config.PersistenceConfig;
+import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.StudentDAO;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.StudentRepository;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.util.StudentGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -20,10 +22,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = {AppConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class StudentRepositoryIntegrationTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    StudentRepository studentRepository;
+    StudentDAO studentRepository;
 
     StudentGenerator studentGenerator;
 
