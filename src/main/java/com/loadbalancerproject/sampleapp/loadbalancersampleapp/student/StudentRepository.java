@@ -14,11 +14,9 @@ import java.util.List;
 
 @Repository
 @SuppressWarnings("unchecked")
-public class StudentRepository {
-
+public class StudentRepository implements StudentDAO {
 
     private LoadBalancer loadBalancer;
-
 
     @Autowired
     public StudentRepository(LoadBalancer loadBalancer) {
@@ -41,6 +39,14 @@ public class StudentRepository {
 
         Root<Student> from = criteriaQuery.from(Student.class);
 
-        return selectQuery.getTypedQuery(criteriaQuery.select(from)).getResultList();
+        List<Student> result =  selectQuery.getTypedQuery(criteriaQuery.select(from)).getResultList();
+
+        selectQuery.close();
+
+        return result;
+    }
+
+    public void update(Student student) {
+        loadBalancer.update(student, Student.class);
     }
 }
