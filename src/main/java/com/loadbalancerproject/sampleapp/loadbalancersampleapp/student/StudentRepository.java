@@ -1,22 +1,15 @@
 package com.loadbalancerproject.sampleapp.loadbalancersampleapp.student;
 
 import com.loadbalancerproject.loadbalancer.LoadBalancer;
-import com.loadbalancerproject.loadbalancer.ReadOnlyQueryCreator;
 import com.loadbalancerproject.sampleapp.loadbalancersampleapp.student.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transaction;
 import java.util.List;
 
 @Repository
-
+@SuppressWarnings("unchecked")
 public class StudentRepository {
 
 
@@ -37,11 +30,7 @@ public class StudentRepository {
     }
 
     public List<Student> getAll() {
-        ReadOnlyQueryCreator readonlyExecutor = loadBalancer.getReadonlyExecutor();
-        List result = readonlyExecutor.createReadonlyQuery("from Student").getResultList();
-
-        readonlyExecutor.close();
-
-        return (List<Student>) result;
+        EntityManager entityManager = loadBalancer.getEntityManager();
+        return (List<Student>) entityManager.createQuery("from Student").getResultList();
     }
 }

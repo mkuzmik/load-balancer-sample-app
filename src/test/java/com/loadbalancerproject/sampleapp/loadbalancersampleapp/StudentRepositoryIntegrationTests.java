@@ -36,33 +36,15 @@ public class StudentRepositoryIntegrationTests extends AbstractTestNGSpringConte
     @Test
     public void shouldInsertThenGetManyRecords() throws Exception {
 
-        int numberOfInserts = 500;
-
+        // given
+        int numberOfInserts = 100;
         Collection<Student> expectedStudents = studentGenerator.generateStudents(numberOfInserts);
 
+        // when
         saveStudentsAsynchronously(expectedStudents);
 
+        // then
         assertThatRepositoryContains(expectedStudents);
-    }
-
-    @Test
-    public void manyGetAllRequestsShould() throws Exception {
-
-        int numberOfInserts = 5000;
-        int numberOfGetAllRequests = 500;
-
-        Collection<Student> expectedStudents = studentGenerator.generateStudents(numberOfInserts);
-
-        saveStudentsAsynchronously(expectedStudents);
-
-        long diff = System.currentTimeMillis();
-
-        IntStream.range(0, numberOfGetAllRequests).parallel()
-                .forEach(i ->
-                    assertThatRepositoryContains(expectedStudents)
-                );
-
-        System.out.println("Exec time: " + (System.currentTimeMillis() - diff));
     }
 
     private void saveStudentsAsynchronously(Collection<Student> students) {
