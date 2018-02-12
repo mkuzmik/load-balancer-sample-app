@@ -33,3 +33,33 @@ database_4:
     container_name: db4
     ports:
         - "5436:5432"
+
+database_5:
+    image: postgres:10
+    container_name: db5
+    ports:
+        - "5437:5432"
+
+database_6:
+    image: postgres:10
+    container_name: db6
+    ports:
+        - "5438:5432"
+
+database_7:
+    image: postgres:10
+    container_name: db7
+    ports:
+        - "5439:5432"
+
+database_8:
+    image: postgres:10
+    container_name: db8
+    ports:
+        - "5440:5432"
+
+database_9:
+    image: postgres:10
+    container_name: db9
+    ports:
+        - "5441:5432"
