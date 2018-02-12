@@ -129,6 +129,7 @@ public class PersistenceConfig {
         return loadBalancer;
     }
 
+    @Bean
     public StudentDAO getStudentDAO(LoadBalancer loadBalancer) {
         return new StudentRepository(loadBalancer);
     }
